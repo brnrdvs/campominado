@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campo Minado</title>
+    <link rel="stylesheet" href="../estilo.css">
+</head>
+<body>
+    <h1>CAMPO MINADO</h1>
+    <div id="tabuleiro"></div>
+    <br>
+    <div id="opcoes">
+        <form onsubmit="atualizarTabuleiro()">
+            <label for="larg">LARGURA: </label>
+            <select id="larg" name="larg">
+                <option value="10">10</option>
+                <option value="12">12</option>
+                <option value="14" selected>14</option>
+                <option value="16">16</option>
+                <option value="18">18</option>
+            </select>
+            <br>
+            <label for="alt">ALTURA: </label>
+            <select id="alt" name="alt">
+                <option value="8">8</option>
+                <option value="10" selected>10</option>
+                <option value="12">12</option>
+                <option value="14">14</option>
+                <option value="16">16</option>
+            </select>
+            <br>
+            <label for="bomb">BOMBAS: </label>
+            <select id="bomb" name="bomb">
+                <option value="12" selected>12</option>
+                <option value="14">14</option>
+                <option value="16">16</option>
+                <option value="18">18</option>
+                <option value="20">20</option>
+            </select>
+            <br>
+            <input type="submit" value="NOVO JOGO">
+        </form>
+    </div>
+    <p id="resultado"></p>
+    <br>
+    <p id="numBombas"></p>
+    <script src="codigo.js"></script>
+</body>
+</html>
