@@ -6,7 +6,7 @@ h1 { color: yellow;
     font-size: 40px; 
     text-align: center; }
 button { background:#3b3b3b; 
-        color:#3b3b3b; 
+        color:white; 
         font-weight:900;
         width: 30px;
         height: 30px; 
@@ -20,3 +20,8 @@ div {
 .marcado { color: white; }
 .normal {  background:#3b3b3b; 
     color:#3b3b3b;  }
+.centralizar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
