@@ -12,15 +12,15 @@
 
         <div id="tabuleiro" class="prevent-select"></div>
 
-        <div id="opcoes">
+        <div id="opcoes" class="centralizar">
             <form onsubmit="atualizarTabuleiro()">
                 <label for="larg">LARGURA: </label>
                 <select id="larg" name="larg">
                     <option value="10">10</option>
-                    <option value="12">12</option>
                     <option value="14" selected>14</option>
                     <option value="16">16</option>
                     <option value="18">18</option>
+                    <option value="22">22</option>
                 </select>
                 <br>
                 <label for="alt">ALTURA: </label>
@@ -34,11 +34,11 @@
                 <br>
                 <label for="bomb">BOMBAS: </label>
                 <select id="bomb" name="bomb">
-                    <option value="10">10</option>
+                    <option value="8">8</option>
                     <option value="12" selected>12</option>
-                    <option value="14">14</option>
                     <option value="16">16</option>
-                    <option value="18">18</option>
+                    <option value="20">20</option>
+                    <option value="24">24</option>
                 </select>
                 <br>
                 <input type="submit" value="NOVO JOGO">

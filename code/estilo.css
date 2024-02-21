@@ -19,16 +19,11 @@ body {
     overflow: hidden;
 }
 
-.pagina {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
 p { 
     color: blue; 
     font-size: 20px; 
     text-align: center; 
+    margin-top:2%;
 }
 
 h1 { 
@@ -46,13 +41,19 @@ button {
     height: 30px; 
 }
 
+#tabuleiro {
+    margin-bottom: 2%;
+}
+
+.pagina {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
 .revelado { 
     background: rgb(175, 175, 175); 
 }
-
-div { 
-    margin-left: 15%;
-   }
 
 .marcado { 
     color: white; 
@@ -65,13 +66,7 @@ div {
 
 .centralizar {
     display: flex;
-    flex:1;
     justify-content: center;
-    align-items: center;
-}
-
-#tabuleiro {
-    margin-bottom: 2%;
 }
 
 .prevent-select {

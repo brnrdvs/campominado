@@ -2,13 +2,14 @@ const tabuleiro=document.getElementById('tabuleiro'), opcoes=document.getElement
 const resultado=document.getElementById('resultado');
 const larg=document.getElementById('larg'), alt=document.getElementById('alt'), bomb=document.getElementById('bomb');
 const bomba=9;
+const larguraTela=window.innerWidth, larguraBotao=30;
 
-let numRevelados=0, numMarcados=0, fim=false;
+let numRevelados=0, numMarcados=0, fim=false; 
+let iniciado=false, botaoInicial=0;
 let largura=0, altura=0, tam=0, bombas=0;
 let clicado=[], marcado=[], mapa=[];
 
 criarTabuleiro();
-criarMapa();
 
 resultado.innerHTML=bombas-numMarcados+' BOMBAS';
 
@@ -37,6 +38,23 @@ function criarTabuleiro()
             tabuleiro.appendChild(quebra);
         }
     }
+
+    posicionarTabuleiro();
+}
+
+function posicionarTabuleiro()
+{    
+    let larguraTabuleiro=larguraBotao*largura;
+    let tamMargem=(larguraTela/2)-(larguraTabuleiro/2);
+    let tamanhoProporcional=(tamMargem/larguraTela)*100;
+    let margem=tamanhoProporcional+'%';
+
+    if (larguraTabuleiro<larguraTela)
+    {
+        tabuleiro.style.marginLeft=margem;
+    }
+
+    console.log(margem);
 }
 
 function criarMapa()
@@ -47,15 +65,20 @@ function criarMapa()
     for (let loop=1; loop<=tam; loop++)     //inicializa o array com o tamanho da largura*altura
     { mapa.push(0); }
 
+
     for (loop=1; loop<=bombas; loop++)
     {
         let lugar=0;                    //coloca x bombas em pontos aleatorios
-        while (mapa[lugar]==bomba)
+
+        while (mapa[lugar]==bomba || lugar==botaoInicial) //impede a bomba de cair no clique inicial
         {
             lugar=Math.floor(Math.random() * tam)+1;
         }
+    
         mapa[lugar]=bomba;
     }
+
+    console.log('distribuido');
 
     for (loop=1;loop<=tam;loop++)
     {
@@ -97,13 +120,14 @@ function apagar()                               //apaga tudo para criar novament
     numRevelados=0; 
     numMarcados=0;
     fim=false;
+    iniciado=false;
+    botaoInicial=0;
 }
 
 function atualizarTabuleiro()               //reinicializa o tabuleiro
 {
     apagar();
     criarTabuleiro();
-    criarMapa();
     
     resultado.innerHTML=bombas-numMarcados+' BOMBAS';
     
@@ -226,6 +250,13 @@ function verificarFim()                 //verificar se todos os espaços estao m
 
 function clicar(num)                //executado apos clique esquerdo no espaço
 {
+    if (!iniciado) 
+    { 
+        botaoInicial=num;
+        criarMapa(); 
+        iniciado=true;
+    }
+
     if (!clicado[Number(num)])
     {
         if (mapa[Number(num)]==bomba) 
