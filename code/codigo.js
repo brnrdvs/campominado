@@ -1,21 +1,22 @@
 const tabuleiro=document.getElementById('tabuleiro'), opcoes=document.getElementById('opcoes');
 const resultado=document.getElementById('resultado'), numBombas=document.getElementById('numBombas');
-const largura=document.getElementById('larg'), altura=document.getElementById('alt'), bombas=document.getElementById('bomb');
+const larg=document.getElementById('larg'), alt=document.getElementById('alt'), bomb=document.getElementById('bomb');
 const bomba=9;
 
 let numRevelados=0, numMarcados=0, fim=false;
-let larg=0, alt=0, tam=0, bomb=0;
+let largura=0, altura=0, tam=0, bombas=0;
 let clicado=[], marcado=[], mapa=[];
 
 criarTabuleiro();
 criarMapa();
-numBombas.innerHTML=bomb-numMarcados+' BOMBAS';
+//numBombas.innerHTML=bomb-numMarcados+' BOMBAS';
+//umBombas.innerHTML=tam;
 
 function criarTabuleiro()
 {
-    larg=largura.value;
-    alt=altura.value;
-    tam=larg*alt;
+    largura=larg.value;
+    altura=alt.value;
+    tam=largura*altura;
 
     for (let loop=1; loop<=tam; loop++)
     {
@@ -30,23 +31,24 @@ function criarTabuleiro()
         clicado.push(false);
         marcado.push(false);
 
-        if (loop%larg==0) 
+        if (loop%largura==0) 
         { 
             let quebra=document.createElement('br'); 
             tabuleiro.appendChild(quebra);
         }
+
     }
 }
 
 function criarMapa()
 {
-    bomb=bombas.value;
+    bombas=bomb.value;
     
     mapa[0]=bomba;
     for (let loop=1; loop<=tam; loop++)
     { mapa.push(0); }
 
-    for (loop=1; loop<=bomb; loop++)
+    for (loop=1; loop<=bombas; loop++)
     {
         let lugar=0;
         while (mapa[lugar]==bomba)
@@ -55,47 +57,58 @@ function criarMapa()
         }
         mapa[lugar]=bomba;
     }
+    let varteste=0;
 
-    for (loop=1; loop<=tam; loop++)
+    for (loop=1;loop<=tam;loop++)
     {
-        let verificar=[];
-        if (mapa[loop]==0) 
+        if (mapa[loop]!=bomba) 
         {
-            verificar.push(loop+larg);
-            verificar.push(loop-larg);
-            if (loop%larg>1)
-            {
-                verificar.push(loop+1);
-                verificar.push(loop-1);
-                verificar.push(loop+larg+1);
-                verificar.push(loop+larg-1);
-                verificar.push(loop-larg+1);
-                verificar.push(loop-larg-1);
-            }
-            else
-            {
-                if (loop%larg==1)
-                {
-                    verificar.push(loop+1);
-                    verificar.push(loop+larg+1);
-                    verificar.push(loop-larg+1);
-                }
+            let qtdBombas=0;
 
-                if (loop%larg==0)
-                {
-                    verificar.push(loop-1);
-                    verificar.push(loop+larg-1);
-                    verificar.push(loop-larg-1);
-                }
+            if (loop>largura) { if (mapa[loop-largura]==bomba) { qtdBombas++; } }             //se nao estiver no topo, olhar para cima
+            if (loop<=tam-largura) { if (mapa[loop+largura]==bomba) { qtdBombas++; }  varteste++; }        //se nao estiver embaixo, olhar para baixo
+
+            if (loop%largura!=1)                                                           //se nao estiver no canto esquerdo, olhar pra esquerda
+            {
+                if (mapa[loop+1]==bomba) { qtdBombas++; }
+                if (loop>largura) { if (mapa[loop-largura+1]==bomba) { qtdBombas++; } }       //se nao estiver no topo, olhar para esquerda acima
+                if (loop<=tam-largura) { if (mapa[loop+largura+1]==bomba) { qtdBombas++; } }  //se nao estiver embaixo, olhar pra esquerda abaixo
             }
 
-            for (let loop1=0; loop1<verificar.length; loop1++)
+            if (loop%largura!=0)                                                           //mesma rotina mas para a direita   
             {
-                if (verificar[loop1]>0 && verificar[loop1]<=tam)
-                { if (mapa[verificar[loop1]]==bomba) { mapa[loop]++; } }
-            }
+                if (mapa[loop-1]==bomba) { qtdBombas++; }
+                if (loop>largura) { if (mapa[loop-largura-1]==bomba) { qtdBombas++; } } 
+                if (loop<=tam-largura) { if (mapa[loop+largura-1]==bomba) { qtdBombas++; } }     
+            }   
+
+            mapa[loop]=qtdBombas;
         }
     }
+
+    for (loop=1;loop<=tam;loop++)
+    {
+        let botaoAtual=document.getElementById(loop);
+        if (mapa[loop]==bomba) { botaoAtual.innerText='B'; }
+        else if (mapa[loop]>0) { botaoAtual.innerText=mapa[loop]; }
+    }
+
+    numBombas.innerHTML=varteste
+
+    for (loop=0;loop<=altura;loop++)
+    {
+        let texto=document.createElement("p");
+        for (loop1=loop*largura+1; loop1<=loop*largura+largura; loop1++)
+        {
+            let txt='a';
+            if (mapa[loop1]==bomba) { texto+='B' }
+            if (mapa[loop1]==0) { texto+='-' }
+            else { texto+=mapa[loop1]; }
+        }
+        texto.innerText=txt;
+        tabuleiro.appendChild(texto);
+        tabuleiro.innerHTML=txt;
+    }    
 }
 
 function apagar()
@@ -117,7 +130,7 @@ function atualizarTabuleiro()
     criarTabuleiro();
     criarMapa();
     
-    numBombas.innerHTML=bomb-numMarcados+' BOMBAS';
+    numBombas.innerHTML=bombas-numMarcados+' BOMBAS';
     
     event.preventDefault();
 }
@@ -185,33 +198,33 @@ function revelarProximos(num)                           //recursiva
             clicado[num]=true;
             numRevelados++;
 
-            if (num>larg)                               //se espaço estiver fora da primeira linha,
+            if (num>largura)                               //se espaço estiver fora da primeira linha,
             {
-                revelarProximos(num-larg)               //verificar linha acima,
-                if (num%larg!=1)                        //se espaço nao estiver no canto esquerdo,
+                revelarProximos(num-largura)               //verificar linha acima,
+                if (num%largura!=1)                        //se espaço nao estiver no canto esquerdo,
                 {
                     revelarProximos(num-1);             //verificar esquerda
-                    revelarProximos(num-larg-1);        //e esquerda para cima
+                    revelarProximos(num-largura-1);        //e esquerda para cima
                 }
-                if (num%larg!=0)                        //se espaço nao estiver no canto direito,
+                if (num%largura!=0)                        //se espaço nao estiver no canto direito,
                 {
                     revelarProximos(num+1);             //verificar direita
-                    revelarProximos(num-larg+1);        //e direita para cima
+                    revelarProximos(num-largura+1);        //e direita para cima
                 }
             }
 
-            if (num<tam-larg)                       //se espaço estiver fora da ultima linha,
+            if (num<tam-largura)                       //se espaço estiver fora da ultima linha,
             {
-                revelarProximos(num+larg);          //verificar linha abaixo
-                if (num%larg!=1)                    //se espaço nao estiver no canto esquerdo,
+                revelarProximos(num+largura);          //verificar linha abaixo
+                if (num%largura!=1)                    //se espaço nao estiver no canto esquerdo,
                 {
                     revelarProximos(num-1);         //verificar esquerda
-                    revelarProximos(num+larg-1);    //e esquerda para baixo
+                    revelarProximos(num+largura-1);    //e esquerda para baixo
                 }
-                if (num%larg!=0)                    //se espaço nao estiver no canto direito,
+                if (num%largura!=0)                    //se espaço nao estiver no canto direito,
                 {
                     revelarProximos(num+1);         //verificar direita
-                    revelarProximos(num+larg+1);    //e direita para baixo
+                    revelarProximos(num+largura+1);    //e direita para baixo
                 }
             }
         }
@@ -229,7 +242,7 @@ function revelarProximos(num)                           //recursiva
 
 function verificarFim()
 {
-    if (numMarcados==bomb && numRevelados==tam-bomb)
+    if (numMarcados==bombas && numRevelados==tam-bombas)
     { 
         fim=true;
         numBombas.innerHTML='VENCEU';
@@ -272,6 +285,6 @@ function marcar(num)
         numMarcados--;
     }
 
-    numBombas.innerHTML=bomb-numMarcados+' BOMBAS';
+    numBombas.innerHTML=bombas-numMarcados+' BOMBAS';
     verificarFim();
 }
