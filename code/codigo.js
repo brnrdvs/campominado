@@ -1,5 +1,5 @@
 const tabuleiro=document.getElementById('tabuleiro'), opcoes=document.getElementById('opcoes');
-const resultado=document.getElementById('resultado'), numBombas=document.getElementById('numBombas');
+const resultado=document.getElementById('resultado');
 const larg=document.getElementById('larg'), alt=document.getElementById('alt'), bomb=document.getElementById('bomb');
 const bomba=9;
 
@@ -9,109 +9,84 @@ let clicado=[], marcado=[], mapa=[];
 
 criarTabuleiro();
 criarMapa();
-//numBombas.innerHTML=bomb-numMarcados+' BOMBAS';
-//umBombas.innerHTML=tam;
+
+resultado.innerHTML=bombas-numMarcados+' BOMBAS';
 
 function criarTabuleiro()
 {
-    largura=larg.value;
-    altura=alt.value;
+    largura=Number(larg.value);
+    altura=Number(alt.value);
     tam=largura*altura;
 
     for (let loop=1; loop<=tam; loop++)
     {
-        let botao=document.createElement("button");
+        let botao=document.createElement("button");             //cria os botoes que serao clicados no jogo
 
         botao.id=loop;
         botao.innerText='-';
         botao.setAttribute('onclick','clicar(this.id)');
         botao.setAttribute('oncontextmenu','marcar(this.id); return false;');
-        tabuleiro.appendChild(botao);
+        tabuleiro.appendChild(botao);                           //insere o botao no tabuleiro
         
-        clicado.push(false);
+        clicado.push(false);                                    //inicializa arrays de controle 'clicado' e 'marcado' com false
         marcado.push(false);
 
-        if (loop%largura==0) 
+        if (loop%largura==0)                                   //quebra de linhas do tabuleiro
         { 
             let quebra=document.createElement('br'); 
             tabuleiro.appendChild(quebra);
         }
-
     }
 }
 
 function criarMapa()
 {
-    bombas=bomb.value;
+    bombas=Number(bomb.value);
     
     mapa[0]=bomba;
-    for (let loop=1; loop<=tam; loop++)
+    for (let loop=1; loop<=tam; loop++)     //inicializa o array com o tamanho da largura*altura
     { mapa.push(0); }
 
     for (loop=1; loop<=bombas; loop++)
     {
-        let lugar=0;
+        let lugar=0;                    //coloca x bombas em pontos aleatorios
         while (mapa[lugar]==bomba)
         {
             lugar=Math.floor(Math.random() * tam)+1;
         }
         mapa[lugar]=bomba;
     }
-    let varteste=0;
 
     for (loop=1;loop<=tam;loop++)
     {
-        if (mapa[loop]!=bomba) 
+        if (mapa[loop]!=bomba)                                                  //olhar para cada um dos 8 espaços no entorno
         {
             let qtdBombas=0;
 
             if (loop>largura) { if (mapa[loop-largura]==bomba) { qtdBombas++; } }             //se nao estiver no topo, olhar para cima
-            if (loop<=tam-largura) { if (mapa[loop+largura]==bomba) { qtdBombas++; }  varteste++; }        //se nao estiver embaixo, olhar para baixo
 
-            if (loop%largura!=1)                                                           //se nao estiver no canto esquerdo, olhar pra esquerda
+            if (loop<=tam-largura) { if (mapa[loop+largura]==bomba) { qtdBombas++; } }       //se nao estiver embaixo, olhar para baixo
+
+            if (loop%largura!=0)                                                           //se nao estiver no canto direito, olhar pra esquerda
             {
                 if (mapa[loop+1]==bomba) { qtdBombas++; }
-                if (loop>largura) { if (mapa[loop-largura+1]==bomba) { qtdBombas++; } }       //se nao estiver no topo, olhar para esquerda acima
-                if (loop<=tam-largura) { if (mapa[loop+largura+1]==bomba) { qtdBombas++; } }  //se nao estiver embaixo, olhar pra esquerda abaixo
+                if (loop>largura) { if (mapa[loop-largura+1]==bomba) { qtdBombas++; } }       //se nao estiver no topo, olhar para direita acima
+                if (loop<=tam-largura) { if (mapa[loop+largura+1]==bomba) { qtdBombas++; } }  //se nao estiver embaixo, olhar pra direita abaixo
             }
 
-            if (loop%largura!=0)                                                           //mesma rotina mas para a direita   
+            if (loop%largura!=1)                                                           //mesma rotina mas excluindo canto esquerdo   
             {
                 if (mapa[loop-1]==bomba) { qtdBombas++; }
                 if (loop>largura) { if (mapa[loop-largura-1]==bomba) { qtdBombas++; } } 
                 if (loop<=tam-largura) { if (mapa[loop+largura-1]==bomba) { qtdBombas++; } }     
             }   
-
+            
             mapa[loop]=qtdBombas;
         }
     }
-
-    for (loop=1;loop<=tam;loop++)
-    {
-        let botaoAtual=document.getElementById(loop);
-        if (mapa[loop]==bomba) { botaoAtual.innerText='B'; }
-        else if (mapa[loop]>0) { botaoAtual.innerText=mapa[loop]; }
-    }
-
-    numBombas.innerHTML=varteste
-
-    for (loop=0;loop<=altura;loop++)
-    {
-        let texto=document.createElement("p");
-        for (loop1=loop*largura+1; loop1<=loop*largura+largura; loop1++)
-        {
-            let txt='a';
-            if (mapa[loop1]==bomba) { texto+='B' }
-            if (mapa[loop1]==0) { texto+='-' }
-            else { texto+=mapa[loop1]; }
-        }
-        texto.innerText=txt;
-        tabuleiro.appendChild(texto);
-        tabuleiro.innerHTML=txt;
-    }    
 }
 
-function apagar()
+function apagar()                               //apaga tudo para criar novamente
 {    
     let coisa=document.getElementById('tabuleiro');
     while (coisa.firstChild) { coisa.removeChild(coisa.lastChild); }
@@ -124,18 +99,18 @@ function apagar()
     fim=false;
 }
 
-function atualizarTabuleiro()
+function atualizarTabuleiro()               //reinicializa o tabuleiro
 {
     apagar();
     criarTabuleiro();
     criarMapa();
     
-    numBombas.innerHTML=bombas-numMarcados+' BOMBAS';
+    resultado.innerHTML=bombas-numMarcados+' BOMBAS';
     
     event.preventDefault();
 }
 
-function verificarCor(num)
+function verificarCor(num)                  //colore os numeros de cada botao
 {
     if (num==1) { return "mediumblue" }
     if (num==2) { return "green" }
@@ -147,7 +122,7 @@ function verificarCor(num)
     if (num==8) { return "darkgray" }
 }
 
-function revelarTudo()
+function revelarTudo()                      //revela o tabuleiro todo após clicar em bomba
 {    
     for (let loop=1; loop<=tam; loop++)
     {
@@ -158,7 +133,7 @@ function revelarTudo()
             clicado[loop]=true;
             if (mapa[loop]==bomba)      
             {
-                botaoAtual.innerText='B';
+                botaoAtual.innerText='💣';
                 botaoAtual.style.color='red';
             }
             else if (mapa[loop]==0) 
@@ -175,7 +150,7 @@ function revelarTudo()
     }
 
     fim=true;
-    numBombas.innerHTML='PERDEU';
+    resultado.innerHTML='PERDEU';
 }
 
 function revelarProximos(num)                           //recursiva
@@ -240,16 +215,16 @@ function revelarProximos(num)                           //recursiva
     }
 }
 
-function verificarFim()
+function verificarFim()                 //verificar se todos os espaços estao marcados
 {
     if (numMarcados==bombas && numRevelados==tam-bombas)
     { 
         fim=true;
-        numBombas.innerHTML='VENCEU';
+        resultado.innerHTML='VENCEU';
     }
 }
 
-function clicar(num)
+function clicar(num)                //executado apos clique esquerdo no espaço
 {
     if (!clicado[Number(num)])
     {
@@ -265,11 +240,11 @@ function clicar(num)
     }
 }
 
-function marcar(num)
+function marcar(num)                   //executado apos clique direito no espaço
 {
     botaoAtual=document.getElementById(num);
 
-    if (!marcado[Number(num)] && !clicado[Number(num)] && numMarcados!=bomb)
+    if (!marcado[Number(num)] && !clicado[Number(num)] && numMarcados!=bombas)
     {
         botaoAtual.setAttribute("class","marcado");
         botaoAtual.innerText='*';
@@ -285,6 +260,6 @@ function marcar(num)
         numMarcados--;
     }
 
-    numBombas.innerHTML=bombas-numMarcados+' BOMBAS';
+    resultado.innerHTML=bombas-numMarcados+' BOMBAS';
     verificarFim();
 }

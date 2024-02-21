@@ -1,27 +1,81 @@
-body { background: grey; }
-p { color: blue; 
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bolder;
+}
+
+html { 
+    height: 100%;
+}
+
+body { 
+    margin-top: 2%;
+    background: grey; 
+    height:100%;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.pagina {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+p { 
+    color: blue; 
     font-size: 20px; 
-    text-align: center; }
-h1 { color: yellow;
+    text-align: center; 
+}
+
+h1 { 
+    color:darkred;
     font-size: 40px; 
-    text-align: center; }
-button { background:#3b3b3b; 
-        color:white; 
-        font-weight:900;
-        width: 30px;
-        height: 30px; 
-      }
+    text-align: center; 
+    margin-bottom: 2%;
+}
+
+button { 
+    background:#3b3b3b; 
+    color:#3b3b3b; 
+    font-weight:900;
+    width: 30px;
+    height: 30px; 
+}
+
 .revelado { 
     background: rgb(175, 175, 175); 
 }
+
 div { 
     margin-left: 15%;
    }
-.marcado { color: white; }
-.normal {  background:#3b3b3b; 
-    color:#3b3b3b;  }
-.centralizar {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+
+.marcado { 
+    color: white; 
 }
+
+.normal {  
+    background:#3b3b3b; 
+    color:#3b3b3b;  
+}
+
+.centralizar {
+    display: flex;
+    flex:1;
+    justify-content: center;
+    align-items: center;
+}
+
+#tabuleiro {
+    margin-bottom: 2%;
+}
+
+.prevent-select {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}  
