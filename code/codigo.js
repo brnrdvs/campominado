@@ -10,10 +10,9 @@ let largura=0, altura=0, tam=0, bombas=0;
 let clicado=[], marcado=[], mapa=[];
 
 criarTabuleiro();
-
 resultado.innerHTML=bombas-numMarcados+' BOMBAS';
 
-function criarTabuleiro()
+function criarTabuleiro()                               //cria os botoes que serao clicados no jogo
 {
     largura=Number(larg.value);
     altura=Number(alt.value);
@@ -21,7 +20,7 @@ function criarTabuleiro()
 
     for (let loop=1; loop<=tam; loop++)
     {
-        let botao=document.createElement("button");             //cria os botoes que serao clicados no jogo
+        let botao=document.createElement("button");           
 
         botao.id=loop;
         botao.innerText='-';
@@ -42,7 +41,7 @@ function criarTabuleiro()
     posicionarTabuleiro();
 }
 
-function posicionarTabuleiro()
+function posicionarTabuleiro()                      //centraliza a div do tabuleiro de acordo com o tamanho
 {    
     let larguraTabuleiro=larguraBotao*largura;
     let tamMargem=(larguraTela/2)-(larguraTabuleiro/2);
@@ -57,7 +56,7 @@ function posicionarTabuleiro()
     console.log(margem);
 }
 
-function criarMapa()
+function criarMapa()                    //distribui as bombas e os numeros pelo tabuleiro
 {
     bombas=Number(bomb.value);
     
@@ -77,8 +76,6 @@ function criarMapa()
     
         mapa[lugar]=bomba;
     }
-
-    console.log('distribuido');
 
     for (loop=1;loop<=tam;loop++)
     {
@@ -158,7 +155,6 @@ function revelarTudo()                      //revela o tabuleiro todo após clic
             if (mapa[loop]==bomba)      
             {
                 botaoAtual.innerText='💣';
-                botaoAtual.style.color='red';
             }
             else if (mapa[loop]==0) 
             { 
@@ -174,10 +170,9 @@ function revelarTudo()                      //revela o tabuleiro todo após clic
     }
 
     fim=true;
-    resultado.innerHTML='PERDEU';
 }
 
-function revelarProximos(num)                           //recursiva
+function revelarProximos(num)               //recursivamente libera os quadrados vazios perto do clicado
 {
     let botaoAtual=document.getElementById(num);        
 
@@ -239,11 +234,12 @@ function revelarProximos(num)                           //recursiva
     }
 }
 
-function verificarFim()                 //verificar se todos os espaços estao marcados
+function verificarFim()                 //verifica se todos os espaços estao liberados
 {
     if (numMarcados==bombas && numRevelados==tam-bombas)
     { 
         fim=true;
+        revelarTudo;
         resultado.innerHTML='VENCEU';
     }
 }
@@ -262,6 +258,7 @@ function clicar(num)                //executado apos clique esquerdo no espaço
         if (mapa[Number(num)]==bomba) 
         {
             revelarTudo();
+            resultado.innerHTML='PERDEU';
         }
         else
         {
